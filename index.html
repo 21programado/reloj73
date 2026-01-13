@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reloj</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a1929">
+
+<style>
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #0a1929;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    text-align: center;
+    position: relative;
+}
+
+.date {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 0.9em;
+    color: #9fbcd4;
+}
+
+.label {
+    font-size: 2.2em;
+    margin-bottom: 10px;
+}
+
+.time {
+    font-size: clamp(4.5em, 18vw, 9em);
+    font-weight: 700;
+    color: #64b5f6;
+    line-height: 1;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+    <div class="date" id="date"></div>
+    <div class="label">Son las</div>
+    <div class="time" id="clock">00:00</div>
+</div>
+
+<script>
+function updateClock() {
+    const now = new Date();
+
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('clock').textContent = `${h}:${m}`;
+
+    const options = { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' };
+    document.getElementById('date').textContent =
+        now.toLocaleDateString('es-ES', options);
+}
+
+updateClock();
+setInterval(updateClock, 1000);
+
+// Registrar Service Worker
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+}
+</script>
+</body>
+</html>
